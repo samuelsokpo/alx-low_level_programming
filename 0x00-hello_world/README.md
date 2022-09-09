@@ -1,1 +1,1 @@
-write a c program with an output
+c program that prints

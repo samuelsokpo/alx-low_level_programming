@@ -1,1 +1,1 @@
-create c file without linking
+Write a script that compiles a C file and creates an executable named cisfun

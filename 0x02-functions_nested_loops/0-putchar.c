@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <main.h>
 
 /**
  * main - prints the string "_putchar" from a character array.
@@ -9,6 +9,13 @@
 
 int main(void)
 {
-	printf("_putchar\n");
-	return (0);
+char c[] = '_putchar';
+int i;
+
+for (i = 0; i < 1; i++)
+{
+	_putchar(c[i]);
+}
+_putchar('\n');
+return (0);
 }

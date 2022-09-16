@@ -2,25 +2,23 @@
 #include <stdio.h>
 
 /**
- * main - prints from 1 to 100. Trunc multiples of 3 for Fizz, 5 for buzz
- *
- * Return: 0 on success and the stated ptinr
+ * main - checks for a digit (zero through nine).
+ * Return: Always 0.
  */
-
 int main(void)
 {
-	int i = 1;
+	int x;
 
-	for (; i < 100 ; i++)
+	for (x = 1; x <= 100; x++)
 	{
-		if (i % 3 == 0 && i % 5 == 0)
+		if (x % 3 == 0 && x % 5 == 0)
 			printf("FizzBuzz ");
-		else if (i % 3 == 0)
+		else if (x % 3 == 0)
 			printf("Fizz ");
-		else if (i % 5 == 0)
+		else if (x % 5 == 0)
 			printf("Buzz ");
 		else
-			printf("%d ", i);
+			printf("%d ", x);
 	}
 	printf("Buzz\n");
 

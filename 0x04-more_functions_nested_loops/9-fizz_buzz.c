@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 /**
- * main - checks for a digit (zero through nine).
+ * main - Entry point.
  * Return: Always 0.
  */
 

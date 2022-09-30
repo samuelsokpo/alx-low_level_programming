@@ -1,72 +1,86 @@
 #include "main.h"
-#include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
-#include <stdbool.h>
-
+#include <stdio.h>
 /**
- * coinConverter - Helper function that does all the mathematics
- * @i: Passed in variable from main for calculations
- * Return: The number of coins needed minimum for the passed in variable
+ * wordcounter - counts words and the letters in them
+ * @str: string to count
+ * @pos: position of the word to count characters from
+ * @firstchar: position of the first letter of the word
+ * if pos = 0, count the number of chars in the word
+ * else count number of words
+ * Return: wordcount if pos == 0,
+ * length of word if pos > 0,
+ * position of word if pos > 0 && firstchar > 0
  */
-int coinConverter(int i)
+int wordcounter(char *str, int pos, char firstchar)
 {
-	int count = 0;
+	int i, wordcount, charcount, flag;
 
-	while (i != 0)
+	str[0] != ' ' ? (wordcount = 1) : (wordcount = 0);
+	for (i = 0, flag = 0; str[i]; i++)
 	{
-		if (i % 10 == 9 || i % 10 == 7)
-			i -= 2;
-		else if (i % 25 == 0)
-			i -= 25;
-		else if (i % 10 == 0)
-			i -= 10;
-		else if (i % 5 == 0)
-			i -= 5;
-		else if (i % 2 == 0)
+		if (str[i] == ' ' && str[i + 1] != ' ' && str[i + 1] != '\0' && flag == 0)
 		{
-			if (i % 10 == 6)
-				i -= 1;
-			else
-				i -= 2;
+			wordcount++;
+			flag = 1;
 		}
-		else
-			i -= 1;
-
-		count++;
+		if (pos > 0 && pos == wordcount)
+		{
+			if (pos > 0 && pos == wordcount && firstchar > 0)
+				return (i);
+			for (charcount = 0; str[i + charcount + 1] != ' '; charcount++)
+				;
+			return (charcount);
+		}
+		if (str[i] == ' ')
+			flag = 0;
 	}
-
-	return (count);
+	return (wordcount);
 }
-
 /**
- * main - Takes in exactly one argument for minimum coin count
- * @argc: Number of command line arguments
- * @argv: Array name
- * Return: 0 if exactly 1 argument is passed into this program, 1 otherwise
+ * strtow - convert a string into a 2d array of words
+ * @str: string to convert
+ * Return: double pointer to 2d array
  */
-int main(int argc, char *argv[])
+char **strtow(char *str)
 {
-	int i, coin;
+	int wc, wordlen, getfirstchar, len, i, j;
+	char **p;
 
-	coin = 0;
-
-	if (argc != 2)
+	for (len = 0; str[len]; len++)
+		;
+	if (str == NULL)
+		return (NULL);
+	wc = wordcounter(str, 0, 0);
+	if (len == 0 || wc == 0)
+		return (NULL);
+	p = malloc((wc + 1) * sizeof(void *));
+	if (p == NULL)
+		return (NULL);
+	for (i = 0, wordlen = 0; i < wc; i++)
 	{
-		printf("Error\n");
-		return (1);
+		/* Allocate memory for nested elements */
+		wordlen = wordcounter(str, i + 1, 0);
+		if (i == 0 && str[i] != ' ')
+			wordlen++;
+		p[i] = malloc(wordlen * sizeof(char) + 1);
+		if (p[i] == NULL)
+		{
+			for ( ; i >= 0; --i)
+				free(p[i]);
+			free(p);
+			return (NULL);
+		}
+		/* initialize each element of the nested array with the word*/
+		getfirstchar = wordcounter(str, i + 1, 1);
+		if (str[0] != ' ' && i > 0)
+			getfirstchar++;
+		else if (str[0] == ' ')
+			getfirstchar++;
+		for (j = 0; j < wordlen; j++)
+			p[i][j] = str[getfirstchar + j];
+		p[i][j] = '\0';
 	}
-
-	i = atoi(argv[1]);
-
-	if (i < 0)
-		printf("0\n");
-	else
-	{
-		coin = coinConverter(i);
-
-		printf("%d\n", coin);
-	}
-
-	return (0);
+	p[i] = NULL;
+	return (p);
 }

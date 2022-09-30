@@ -1,107 +1,72 @@
-/*
- * File: 100-strtow.c
- * Auth: Brennan D Baraban
- */
-
-#include "main.h"
+#include "holberton.h"
+#include <stdio.h>
 #include <stdlib.h>
-
-int word_len(char *str);
-int count_words(char *str);
-char **strtow(char *str);
+#include <ctype.h>
+#include <stdbool.h>
 
 /**
- * word_len - Locates the index marking the end of the
- *            first word contained within a string.
- * @str: The string to be searched.
- *
- * Return: The index marking the end of the initial word pointed to by str.
+ * coinConverter - Helper function that does all the mathematics
+ * @i: Passed in variable from main for calculations
+ * Return: The number of coins needed minimum for the passed in variable
  */
-int word_len(char *str)
+int coinConverter(int i)
 {
-	int index = 0, len = 0;
+	int count = 0;
 
-	while (*(str + index) && *(str + index) != ' ')
+	while (i != 0)
 	{
-		len++;
-		index++;
+		if (i % 10 == 9 || i % 10 == 7)
+			i -= 2;
+		else if (i % 25 == 0)
+			i -= 25;
+		else if (i % 10 == 0)
+			i -= 10;
+		else if (i % 5 == 0)
+			i -= 5;
+		else if (i % 2 == 0)
+		{
+			if (i % 10 == 6)
+				i -= 1;
+			else
+				i -= 2;
+		}
+		else
+			i -= 1;
+
+		count++;
 	}
 
-	return (len);
+	return (count);
 }
 
 /**
- * count_words - Counts the number of words contained within a string.
- * @str: The string to be searched.
- *
- * Return: The number of words contained within str.
+ * main - Takes in exactly one argument for minimum coin count
+ * @argc: Number of command line arguments
+ * @argv: Array name
+ * Return: 0 if exactly 1 argument is passed into this program, 1 otherwise
  */
-int count_words(char *str)
+int main(int argc, char *argv[])
 {
-	int index = 0, words = 0, len = 0;
+	int i, coin;
 
-	for (index = 0; *(str + index); index++)
-		len++;
+	coin = 0;
 
-	for (index = 0; index < len; index++)
+	if (argc != 2)
 	{
-		if (*(str + index) != ' ')
-		{
-			words++;
-			index += word_len(str + index);
-		}
+		printf("Error\n");
+		return (1);
 	}
 
-	return (words);
-}
+	i = atoi(argv[1]);
 
-/**
- * strtow - Splits a string into words.
- * @str: The string to be split.
- *
- * Return: If str = NULL, str = "", or the function fails - NULL.
- *         Otherwise - a pointer to an array of strings (words).
- */
-char **strtow(char *str)
-{
-	char **strings;
-	int index = 0, words, w, letters, l;
-
-	if (str == NULL || str[0] == '\0')
-		return (NULL);
-
-	words = count_words(str);
-	if (words == 0)
-		return (NULL);
-
-	strings = malloc(sizeof(char *) * (words + 1));
-	if (strings == NULL)
-		return (NULL);
-
-	for (w = 0; w < words; w++)
+	if (i < 0)
+		printf("0\n");
+	else
 	{
-		while (str[index] == ' ')
-			index++;
+		coin = coinConverter(i);
 
-		letters = word_len(str + index);
-
-		strings[w] = malloc(sizeof(char) * (letters + 1));
-
-		if (strings[w] == NULL)
-		{
-			for (; w >= 0; w--)
-				free(strings[w]);
-
-			free(strings);
-			return (NULL);
-		}
-
-		for (l = 0; l < letters; l++)
-			strings[w][l] = str[index++];
-
-		strings[w][l] = '\0';
+		printf("%d\n", coin);
 	}
-	strings[w] = NULL;
 
-	return (strings);
+	return (0);
 }

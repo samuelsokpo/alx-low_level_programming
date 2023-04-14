@@ -1,11 +1,11 @@
-#include "3-calc.h"
 #include <string.h>
+#include "3-calc.h"
 
 /**
- * get_op_func - selects the correct operation toperform
- * @s: operation to perform
- * Return: pointer to the correct function
- */
+  * get_op_func - function that select the correct function
+  * @s: operator passes as argument
+  * Return: pointer to the function that corresponds to the operator
+  **/
 
 int (*get_op_func(char *s))(int, int)
 {
@@ -17,14 +17,15 @@ int (*get_op_func(char *s))(int, int)
 		{"%", op_mod},
 		{NULL, NULL}
 	};
-	int i;
+	int i = 0;
 
-	i = 0;
-	while (ops[i].op != NULL)
+	while (ops[i].op)
 	{
-		if (strcmp(s, ops[i].op) == 0)
-			break;
+		if (strcmp(ops[i].op, s) == 0)
+			return (ops[i].f);
 		i++;
 	}
-	return (ops[i].f);
+	printf("Error\n");
+	exit(99);
+	return (NULL);
 }
